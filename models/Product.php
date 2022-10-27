@@ -7,6 +7,7 @@ class Product {
     public $name;
     public $description = '';
     public $category;
+    public $size = 'M';
 
     function __construct($_brand, $_name, $_price){
         $this->brand = $brand;
