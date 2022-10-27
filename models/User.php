@@ -1,15 +1,18 @@
 <?php
 
+require_once __DIR__ . '/CreditCard.php'
+
 class User{
     public $email;
     public $address;
 
-
-    public $creditCardNumber;
-    public $creditCardExpiryDate;
-    public $creditCardCVV;
+    public $creditCard;
 
     public $cart = [];
+
+    public function addCreditCard($_number, $_expiryDate, $_owner, $_CVV){
+        $this->creditCard = new CreditCard($_number, $_expiryDate, $_owner, $_CVV);
+    }
 
     public function addProduct($product){
         $this->cart[] = $product;
@@ -29,6 +32,15 @@ class User{
             "vat" => $totalVat,
             "granTotal" => $totalPrice + $totalVat
         ];
+    }
+
+    public function pay(){
+        if ($this->creditCard->isValid()){
+            $price = $this->checkOut();
+            if($this->creditCard->proceedPayment($price['granTotal'])){
+                $this->cart = [];
+            }
+        }
     }
 }
 
